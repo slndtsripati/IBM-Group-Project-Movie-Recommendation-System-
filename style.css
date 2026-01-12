@@ -1,0 +1,186 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #111;
+    color: white;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #e50914;
+    /* Netflix Red */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #e50914;
+}
+
+/* Main Section */
+.main {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
+        url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1500&q=80');
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.main h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.search-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+input[type="text"] {
+    width: 400px;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.btn-recommend {
+    padding: 15px 30px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-recommend:hover {
+    background-color: #ff0f1b;
+}
+
+/* Movie Grid */
+.results {
+    padding: 50px;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.movie-card {
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.movie-info {
+    padding: 15px;
+}
+
+.movie-info h3 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.movie-info p {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+/* Initial state: Hidden and slightly shifted down */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+/* State after animation completes: enforces fast hover transition */
+.reveal.revealed {
+    transition: transform 0.3s;
+}
+
+/* Final state: Visible and in original position */
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Loader */
+.loader {
+    border: 5px solid #222;
+    border-top: 5px solid #e50914;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 50px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Nav Active State */
+.nav-links a.active {
+    color: #e50914;
+    font-weight: 600;
+}

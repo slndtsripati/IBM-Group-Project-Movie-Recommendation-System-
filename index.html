@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieRec | AI Recommendations</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Movie<span>Rec</span></div>
+        <ul class="nav-links">
+            <li><a href="#" id="nav-home">Home</a></li>
+            <li><a href="#" id="nav-top-rated">Top Rated</a></li>
+            <li><a href="#" id="nav-genres">Trending</a></li>
+            <!-- Changing Genres to Trending as discussed in plan/simplicity -->
+        </ul>
+    </nav>
+
+    <header class="main">
+        <div class="main-content">
+            <h1>Find Your Next Favorite Movie</h1>
+            <p>Enter a movie you love, and our AI will do the rest.</p>
+
+            <div class="search-container">
+                <input type="text" placeholder="Type a movie name ..." id="movieInput">
+                <button type="submit" class="btn-recommend">Recommend</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="results">
+        <h2>Recommended For You</h2>
+        <div id="loader" class="loader hidden"></div>
+        <div class="movie-grid">
+            <!-- Movie cards will be dynamically injected here -->
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

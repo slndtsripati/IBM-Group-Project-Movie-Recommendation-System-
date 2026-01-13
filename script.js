@@ -12,7 +12,6 @@ const navHome = document.getElementById("nav-home");
 const navTopRated = document.getElementById("nav-top-rated");
 const navTrending = document.getElementById("nav-genres");
 
-// --- Helpers ---
 const showLoader = () => {
   loader.classList.remove("hidden");
   grid.innerHTML = "";
@@ -110,7 +109,6 @@ function scrollToResults() {
   resultsTitle.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// --- Events ---
 recommendBtn.addEventListener("click", (e) => {
   e.preventDefault();
   if (!input.value.trim()) return;
@@ -148,7 +146,7 @@ navTrending.addEventListener("click", (e) => {
   scrollToResults();
 });
 
-// Startup load
+
 document.addEventListener("DOMContentLoaded", () => {
   setActiveNav(navHome);
   fetchAndShow(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`, "Trending This Week");

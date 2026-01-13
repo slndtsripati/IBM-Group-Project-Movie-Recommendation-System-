@@ -2,12 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, sans-serif;
 }
 
 body {
-    background-color: #111;
-    color: white;
+    background: #111;
+    color: #fff;
 }
 
 /* Navbar */
@@ -15,9 +15,9 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 20px 50px;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.82), transparent);
     position: fixed;
-    width: 100%;
+    inset: 0 0 auto 0; /* top:0 left:0 right:0 */
     z-index: 100;
 }
 
@@ -29,7 +29,6 @@ body {
 
 .logo span {
     color: #e50914;
-    /* Netflix Red */
 }
 
 .nav-links {
@@ -40,9 +39,9 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: white;
+    color: #fff;
     font-size: 0.9rem;
-    transition: 0.3s;
+    transition: color 0.3s;
 }
 
 .nav-links a:hover {
@@ -52,12 +51,13 @@ body {
 /* Main Section */
 .main {
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
         url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1500&q=80');
     background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-position: center;
+    display: grid;
+    place-items: center;
     text-align: center;
 }
 
@@ -84,12 +84,12 @@ input[type="text"] {
 .btn-recommend {
     padding: 15px 30px;
     background-color: #e50914;
-    color: white;
-    border: none;
+    color: #fff;
+    border: 0;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+    font-weight: 700;
+    transition: background-color 0.3s;
 }
 
 .btn-recommend:hover {
@@ -112,8 +112,9 @@ input[type="text"] {
     background: #222;
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.3s;
     cursor: pointer;
+    transition: transform 0.3s;
+    will-change: transform;
 }
 
 .movie-card:hover {
@@ -140,19 +141,17 @@ input[type="text"] {
     color: #999;
 }
 
-/* Initial state: Hidden and slightly shifted down */
+/* Reveal Animation */
 .reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s ease-out;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-/* State after animation completes: enforces fast hover transition */
 .reveal.revealed {
     transition: transform 0.3s;
 }
 
-/* Final state: Visible and in original position */
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
@@ -175,7 +174,7 @@ input[type="text"] {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
+    0% { transform: rotate(0); }
     100% { transform: rotate(360deg); }
 }
 

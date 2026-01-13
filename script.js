@@ -1,40 +1,158 @@
-const API_KEY = 'abaf5ddb378772eba758d5b4c3ea8e4d';
-const BASE_URL = 'https://api.themoviedb.org/3';
-const IMG_PATH = 'https://image.tmdb.org/t/p/w1280';
+const API_KEY = "abaf5ddb378772eba758d5b4c3ea8e4d";
+const BASE_URL = "https://api.themoviedb.org/3";
+const IMG_PATH = "https://image.tmdb.org/t/p/w1280";
 
-const main = document.querySelector('.movie-grid');
-const search = document.getElementById('movieInput');
-const btn = document.querySelector('.btn-recommend');
-const resultsTitle = document.querySelector('.results h2');
-const loader = document.getElementById('loader');
+const grid = document.querySelector(".movie-grid");
+const input = document.getElementById("movieInput");
+const recommendBtn = document.querySelector(".btn-recommend");
+const resultsTitle = document.querySelector(".results h2");
+const loader = document.getElementById("loader");
 
-const navHome = document.getElementById('nav-home');
-const navTopRated = document.getElementById('nav-top-rated');
-const navTrending = document.getElementById('nav-genres'); // Using "Trending" label in HTML
+const navHome = document.getElementById("nav-home");
+const navTopRated = document.getElementById("nav-top-rated");
+const navTrending = document.getElementById("nav-genres");
 
-// --- Utility Functions ---
+// --- Helpers ---
+const showLoader = () => {
+  loader.classList.remove("hidden");
+  grid.innerHTML = "";
+};
 
-function showLoader() {
-    loader.classList.remove('hidden');
-    main.innerHTML = ''; // Clear previous results while loading
-}
+const hideLoader = () => loader.classList.add("hidden");
 
-function hideLoader() {
-    loader.classList.add('hidden');
-}
-
-function setActiveNav(navElement) {
-    document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
-    if (navElement) navElement.classList.add('active');
-}
+const setActiveNav = (activeEl) => {
+  document.querySelectorAll(".nav-links a").forEach((el) => el.classList.remove("active"));
+  if (activeEl) activeEl.classList.add("active");
+};
 
 async function fetchAndShow(url, titleText) {
-    showLoader();
-    resultsTitle.innerText = titleText;
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-        hideLoader();
+  showLoader();
+  resultsTitle.innerText = titleText;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    hideLoader();
+
+    if (data?.results?.length) showMovies(data.results);
+    else grid.innerHTML = `<p class="error-msg">No movies found.</p>`;
+  } catch (err) {
+    console.error("Fetch error:", err);
+    hideLoader();
+    grid.innerHTML = `<p class="error-msg">Something went wrong. Please try again later.</p>`;
+  }
+}
+
+async function getRecommendations(query) {
+  setActiveNav(null);
+  showLoader();
+
+  const searchUrl = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query.trim())}`;
+
+  try {
+    const res = await fetch(searchUrl);
+    const data = await res.json();
+
+    if (!data?.results?.length) {
+      hideLoader();
+      resultsTitle.innerText = "No movies found. Try another search!";
+      grid.innerHTML = "";
+      return;
+    }
+
+    const best = data.results[0];
+    resultsTitle.innerText = `Because you liked "${best.title}"...`;
+
+    const recUrl = `${BASE_URL}/movie/${best.id}/recommendations?api_key=${API_KEY}`;
+    const recRes = await fetch(recUrl);
+    const recData = await recRes.json();
+
+    hideLoader();
+    showMovies(recData?.results || []);
+  } catch (err) {
+    console.error("Recommendation error:", err);
+    hideLoader();
+    resultsTitle.innerText = "Error finding recommendations.";
+  }
+}
+
+function showMovies(movies) {
+  grid.innerHTML = "";
+
+  movies.slice(0, 12).forEach((movie, idx) => {
+    const { title, poster_path, vote_average, release_date } = movie;
+    if (!poster_path) return;
+
+    const card = document.createElement("div");
+    card.className = "movie-card reveal";
+    card.style.transitionDelay = `${idx * 0.1}s`;
+
+    card.innerHTML = `
+      <img src="${IMG_PATH}${poster_path}" alt="${title}">
+      <div class="movie-info">
+        <h3>${title}</h3>
+        <p>⭐ ${Number(vote_average).toFixed(1)} | ${release_date ? release_date.slice(0, 4) : "N/A"}</p>
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+    requestAnimationFrame(() => card.classList.add("active"));
+
+    setTimeout(() => {
+      card.classList.add("revealed");
+      card.style.transitionDelay = "0s";
+    }, idx * 100 + 800);
+  });
+}
+
+function scrollToResults() {
+  resultsTitle.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// --- Events ---
+recommendBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (!input.value.trim()) return;
+  getRecommendations(input.value);
+  input.value = "";
+  scrollToResults();
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+  if (!input.value.trim()) return;
+  getRecommendations(input.value);
+  input.value = "";
+  scrollToResults();
+});
+
+navHome.addEventListener("click", (e) => {
+  e.preventDefault();
+  setActiveNav(navHome);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  fetchAndShow(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`, "Trending This Week");
+});
+
+navTopRated.addEventListener("click", (e) => {
+  e.preventDefault();
+  setActiveNav(navTopRated);
+  fetchAndShow(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}`, "Top Rated Movies");
+  scrollToResults();
+});
+
+navTrending.addEventListener("click", (e) => {
+  e.preventDefault();
+  setActiveNav(navTrending);
+  fetchAndShow(`${BASE_URL}/trending/movie/day?api_key=${API_KEY}`, "Trending Today");
+  scrollToResults();
+});
+
+// Startup load
+document.addEventListener("DOMContentLoaded", () => {
+  setActiveNav(navHome);
+  fetchAndShow(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`, "Trending This Week");
+});        hideLoader();
         if (data.results && data.results.length > 0) {
             showMovies(data.results);
         } else {

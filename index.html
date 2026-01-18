@@ -17,7 +17,7 @@
             <li><a href="#" id="nav-home">Home</a></li>
             <li><a href="#" id="nav-top-rated">Top Rated</a></li>
             <li><a href="#" id="nav-genres">Trending</a></li>
-            <!-- Changing Genres to Trending as discussed in plan/simplicity -->
+            <li><a href="#" id="nav-watchlist">Watchlist</a></li>
         </ul>
     </nav>
 
@@ -40,6 +40,24 @@
             <!-- Movie cards will be dynamically injected here -->
         </div>
     </section>
+
+    <!-- Movie Details Modal -->
+    <div id="movie-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <img id="modal-poster" src="" alt="Movie Poster">
+                <div class="modal-info">
+                    <h2 id="modal-title">Movie Title</h2>
+                    <p id="modal-rating">⭐ 0.0</p>
+                    <p id="modal-overview">Plot summary...</p>
+                    <div id="modal-extra-info">
+                        <!-- Additional info like Release Date, Language -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 
